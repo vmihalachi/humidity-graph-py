@@ -9,7 +9,7 @@ dati = []
 # servizio per avere le coordinate
 geolocator = Nominatim()
 
-max_dati = 200
+max_dati = 500000
 n_dati = 0
 # leggiamo il file csv
 with open('dati_umidita.csv', 'rb') as csvfile:
@@ -69,19 +69,24 @@ for dato in dati:
 # mostriamo a schermo i dati della citta piu vicina
 print 'Dati per la citta di ' + citta_min_distanza
 
+# date e umidita associate per costruire il grafico
 date = []
 umidita = []
 for dato in dati:
     if dato[0] == citta_min_distanza:
+        # mostriamo a schermo i dati
         print 'In data ' + dato[1] + ' umidita pari a ' + str(dato[2]) + ' %'
+        # aggiugiamo le date e le umidita alle liste
         date.append(dato[1])
         umidita.append(dato[2])
 
-
+# disegniamo il grafico
 data = [go.Scatter(
     x = date,
     y = umidita,
     mode = 'lines',
     name = 'lines'
 )]
+
+# lo carichiamo online
 py.plot(data, filename = 'basic-line')
