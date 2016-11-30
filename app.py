@@ -9,8 +9,6 @@ dati = []
 # servizio per avere le coordinate
 geolocator = Nominatim()
 
-max_dati = 500000
-n_dati = 0
 # leggiamo il file csv
 with open('dati_umidita.csv', 'rb') as csvfile:
     umiditareader = csv.reader(csvfile, delimiter=';', quotechar='|')
@@ -21,9 +19,6 @@ with open('dati_umidita.csv', 'rb') as csvfile:
 
     # per ogni riga del file
     for row in umiditareader:
-        n_dati += 1
-        if n_dati > max_dati:
-            break
 
         # prendiamo le coordinate solo se la citta non l'abbiamo ancora analizzata
         if row[0] != citta_precedente:
