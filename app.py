@@ -1,13 +1,13 @@
 from geopy.distance import vincenty
 from geopy.geocoders import Nominatim
 import csv
-import plotly.plotly as py
-import plotly.graph_objs as go
 
 # dati contenti nome_citta, data, umidita, latitudine, longitudine
 dati = []
 # servizio per avere le coordinate
 geolocator = Nominatim()
+max_dati = 550
+n_dati=0
 
 # leggiamo il file csv
 with open('dati_umidita.csv', 'rb') as csvfile:
@@ -19,6 +19,10 @@ with open('dati_umidita.csv', 'rb') as csvfile:
 
     # per ogni riga del file
     for row in umiditareader:
+
+        n_dati += 1  # RICORDATI DI ELIMINARE QUESTE RIGHE
+        if n_dati > max_dati:
+            break
 
         # prendiamo le coordinate solo se la citta non l'abbiamo ancora analizzata
         if row[0] != citta_precedente:
@@ -50,6 +54,7 @@ citta_min_distanza = ''
 
 # per ogni dato
 for dato in dati:
+
     # citta che di volta in volta analizziamo
     citta_precedente = ''
     if dato[0] != citta_precedente:
@@ -75,13 +80,15 @@ for dato in dati:
         date.append(dato[1])
         umidita.append(dato[2])
 
-# disegniamo il grafico
-data = [go.Scatter(
-    x = date,
-    y = umidita,
-    mode = 'lines',
-    name = 'lines'
-)]
+import matplotlib.pyplot as plt
 
-# lo carichiamo online
-py.plot(data, filename = 'basic-line')
+x = range(0, len(date), 1)
+# plt.xticks(x, date)
+
+plt.plot(x, umidita)
+plt.title('Grafico per la citta di' + citta_min_distanza)
+plt.ylabel('Tasso di umidita (%)')
+plt.xlabel("Giorni dopo il " + date[0])
+
+# mostriamo il grafico
+plt.show()
